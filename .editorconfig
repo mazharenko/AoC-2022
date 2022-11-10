@@ -1,0 +1,12 @@
+root = true
+
+; 4-column space indentation
+[*]
+indent_style = space
+
+[*.{fs,fsx,ipynb}]
+indent_size = 4
+
+[*.{fsproj}]
+indent_size = 2
+
