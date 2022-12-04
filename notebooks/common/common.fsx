@@ -5,6 +5,7 @@ let displayPipe x =
     x |> display |> ignore
     x
 
+
 let splitToTuple2 (separators : string array) (s : string) =
     let split = s.Split(separators, System.StringSplitOptions.RemoveEmptyEntries)
     split.[0], split.[1]
@@ -21,3 +22,10 @@ module Pattern2 =
     let read (f : string -> 'a) (data : string) = 
         data.Split([|"\n\n"; "\r\n\r\n"|], System.StringSplitOptions.RemoveEmptyEntries) 
         |> Array.map f
+
+module Result =
+    let failIfError =
+        function 
+        | Ok x -> x
+        | Error error -> failwith (error.ToString())
+        
