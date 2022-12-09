@@ -5,7 +5,6 @@ let displayPipe x =
     x |> display |> ignore
     x
 
-
 let splitToTuple2 (separators : string array) (s : string) =
     let split = s.Split(separators, System.StringSplitOptions.RemoveEmptyEntries)
     split.[0], split.[1]
@@ -28,4 +27,21 @@ module Result =
         function 
         | Ok x -> x
         | Error error -> failwith (error.ToString())
-        
+
+
+module Array2D = 
+    let toSeq (a:'a[,]) : seq<'a> =
+        a |> Seq.cast<'a>
+    let indexed (a:'a[,]) : (((int*int)*'a)[,]) = 
+        Array2D.mapi (fun i j x -> (i,j),x) a
+
+module Seq =
+    open System.Collections.Generic
+    let takeUntil predicate (s:seq<_>) = 
+        let rec loop (en:IEnumerator<_>) = seq {
+            if en.MoveNext() then
+                yield en.Current
+                if not (predicate en.Current) then
+                    yield! loop en }
+        seq { use en = s.GetEnumerator()
+            yield! loop en }
