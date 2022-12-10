@@ -34,7 +34,7 @@ let private template =
         <script>
             if (typeof DrawMatrix !== 'object') {
                 var script = document.createElement("script");
-                script.setAttribute("src", "./drawMatrix.js");
+                script.setAttribute("src", "[DIR]/matrixFormatting.js");
                 script.onload = function() {
                     render_[ID]();
                 };
@@ -45,10 +45,6 @@ let private template =
         </script>
 
     """
-
-// type Settings(width : int) = 
-//     // member val Width = width with get, set
-//     member this.Width = width
 
 type Settings = {Width: int}
 
@@ -94,8 +90,9 @@ let private formatMatrix displayable =
 
     template
         .Replace("[ID]", guid)
-        .Replace("[DATA]", JsonSerializer.Serialize data)
         .Replace("[SETTINGS]", jsSettings)
+        .Replace("[DIR]", __SOURCE_DIRECTORY__)
+        .Replace("[DATA]", JsonSerializer.Serialize data)
 
 
 Formatter.Register<Displayable>((fun d -> formatMatrix d), "text/html")
