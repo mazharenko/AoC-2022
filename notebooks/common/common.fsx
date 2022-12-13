@@ -41,7 +41,7 @@ module Pattern2 =
         |> Array.map f
 
 module Result =
-    let failIfError =
+    let get =
         function 
         | Ok x -> x
         | Error error -> failwith (error.ToString())
