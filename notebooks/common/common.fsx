@@ -29,7 +29,13 @@ type Point = | Point of (int * int) with
         let x = x1 - x2
         let y = y1 - y2
         Point (x, y)
-    
+
+module Point = 
+    let dir (Point (x,  y)) = 
+        Point (sign x, sign y)
+    let x (Point (x, _)) = x
+    let y (Point (_, y)) = y
+            
 module Pattern1 =
     let read (f : string -> 'a) (data : string) = 
         data.Split([|"\n"; "\r"|], System.StringSplitOptions.RemoveEmptyEntries) 
@@ -52,6 +58,20 @@ module Array2D =
         a |> Seq.cast<'a>
     let indexed (a:'a[,]) : (((int*int)*'a)[,]) = 
         Array2D.mapi (fun i j x -> (i,j),x) a
+    let transpose (a:'a[,]) = 
+        Array2D.initBased
+            (Array2D.base2 a)
+            (Array2D.base1 a)
+            (Array2D.length2 a)
+            (Array2D.length1 a)
+            (fun i j -> a[j, i])
+    let tryGet i j source =
+        if (i >= Array2D.base1 source 
+            && j >= Array2D.base2 source 
+            && i < Array2D.length1 source + Array2D.base1 source 
+            && j < Array2D.length2 source + Array2D.base2 source)
+        then Some source.[i,j]
+        else None
 
 module Seq =
     open System.Collections.Generic
