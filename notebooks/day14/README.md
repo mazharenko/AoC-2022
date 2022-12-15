@@ -1,6 +1,14 @@
+[nb badge]: https://img.shields.io/badge/jupyter-%23FA0F00.svg?logo=jupyter&logoColor=white
+[nbviewer badge]: https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg
+[nb]: https://nbviewer.org/github/mazharenko/AoC-2022/tree/HEAD/notebooks/day14/puzzle.ipynb
+
 # Day 14: Regolith Reservoir
 
 [https://adventofcode.com/2022/day/14](https://adventofcode.com/2022/day/14)
+
+|          | Notebook                              | Also in nbviewer                  |
+| -------- | ------------------------------------- | --------------------------------- |
+| Solution | [![notebook][nb badge]](puzzle.ipynb) | [![nbviewer][nbviewer badge]][nb] |
 
 ## Description
 
