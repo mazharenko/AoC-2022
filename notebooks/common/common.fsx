@@ -35,6 +35,8 @@ module Point =
         Point (sign x, sign y)
     let x (Point (x, _)) = x
     let y (Point (_, y)) = y
+    let mlen (Point (x1,y1)) (Point (x2, y2)) = 
+        abs (x1 - x2) + abs (y1 - y2)
             
 module Pattern1 =
     let read (f : string -> 'a) (data : string) = 
@@ -83,3 +85,44 @@ module Seq =
                     yield! loop en }
         seq { use en = s.GetEnumerator()
             yield! loop en }
+
+
+module Range = 
+
+    type T = int * int
+
+    let contains x ((from, to') : T) = from <= x && x <= to'
+
+    let includes ((fromSuper, toSuper) : T) ((fromSub, toSub) : T) =
+        fromSuper <= fromSub && toSub <= toSuper
+        
+    let overlap ((from1, to1) : T) ((from2, to2) : T) =
+        (to1 < from2 || to2 < from1)
+        |> not
+        
+    let start ((from, _) : T) = from
+    let finish ((_, to') : T) = to'
+
+    let isEmpty ((from, to') : T) =
+        to' < from
+    
+    let len ((from, to') : T) = 
+        if isEmpty (from, to') then 0
+        else to' - from + 1
+
+    let rec union r1 r2 = 
+        if (start r1 > start r2)
+        then
+            union r2 r1
+        else
+            if start r2 <= finish r1 + 1
+            then [ start r1, max (finish r1) (finish r2) ]
+            else [ r1; r2 ]
+    let rec unionAll (rs : T list) = 
+        let rsSorted = rs |> Seq.sortBy start
+        rsSorted
+        |> Seq.fold (fun acc r -> 
+            match acc with
+            | [] -> [ r ]
+            | last::rest -> (union last r |> List.rev)@ rest
+        ) []
