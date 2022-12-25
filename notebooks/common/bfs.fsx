@@ -66,3 +66,59 @@ module Bfs =
             let queue = Queue<((int*int)*'a) list>()
             queue.Enqueue [(starti, startj),matrix[starti,startj]]
             findPath' matrix target visited queue settings
+
+    module Custom = 
+        type Adjacency<'a> = 'a -> 'a list
+        
+        type Target<'a> = 'a -> bool
+        module Targets =
+            let value x : Target<_> = (fun x' -> x = x')
+
+        type Settings<'a,'key> = { VisitedKey: 'a -> 'key; }
+        module Settings =
+            let defaults : Settings<_,_> = {VisitedKey = id;}
+        
+        type Parameters<'a> = { Adjacency: Adjacency<'a> }
+
+        type Path<'a> = 'a list
+        type Result<'a> = 
+            | Found of Path<'a>
+            | NotFound of Path<'a> list
+
+        let rec private findPath' 
+                ((state::prevStates) : Path<'a> list) 
+                (target : Target<'a>) 
+                (visited: HashSet<'key>) 
+                (q : Queue<'a list>)
+                (settings : Settings<'a, 'key>)
+                (parameters : Parameters<'a>) =
+            if (q.Count = 0)
+            then
+                NotFound (state::prevStates)
+            else 
+                let current::rest = q.Dequeue();
+                if target current
+                then
+                    Found (current::rest)
+                else 
+                    let adjacent = parameters.Adjacency current
+
+                    adjacent
+                    |> Seq.filter (fun a ->
+                            let key = settings.VisitedKey a
+                            not <| visited.Contains key
+                        )
+                    // |> Seq.filter (settings.VisitedKey >> visited.Contains >> not)
+                    |> Seq.iter (
+                        fun value' -> 
+                            visited.Add (settings.VisitedKey value') |> ignore
+                            q.Enqueue((value'::current::rest))
+                    )
+                    findPath' ((current::rest)::state::prevStates) target visited q settings parameters
+
+        let findPath (settings : Settings<'a,'key>) (parameters : Parameters<'a>)  (start: 'a) (target : Target<'a>) = 
+            let visited = HashSet<'key>()
+            visited.Add (settings.VisitedKey start) |> ignore
+            let queue = Queue<'a list>()
+            queue.Enqueue([start])
+            findPath' [[start]] target visited queue settings parameters
