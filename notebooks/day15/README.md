@@ -1,6 +1,6 @@
 [nb badge]: https://img.shields.io/badge/jupyter-%23FA0F00.svg?logo=jupyter&logoColor=white
 [nbviewer badge]: https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg
-[nb]: https://nbviewer.org/github/mazharenko/AoC-2022/tree/HEAD/notebooks/day14/puzzle.ipynb
+[nb]: https://nbviewer.org/github/mazharenko/AoC-2022/tree/HEAD/notebooks/day15/puzzle.ipynb
 
 # Day 15: Beacon Exclusion Zone
 
