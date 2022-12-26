@@ -1,6 +1,8 @@
 [<AutoOpen>]
 module common
 
+#nowarn "25"
+
 let displayPipe x =
     x |> display |> ignore
     x
