@@ -39,6 +39,26 @@ module Point =
     let y (Point (_, y)) = y
     let mlen (Point (x1,y1)) (Point (x2, y2)) = 
         abs (x1 - x2) + abs (y1 - y2)
+
+type Point3 = | Point3 of (int * int * int) with
+    static member Zero = Point3(0, 0, 0)
+    static member (+)(Point3 (x1 : int, y1 : int, z1 : int), Point3 (x2 : int, y2 : int, z2)) : Point3 = 
+        let x = x1 + x2
+        let y = y1 + y2
+        let z = z1 + z2
+        Point3 (x, y, z)
+    static member (-)(Point3 (x1 : int, y1 : int, z1 : int), Point3 (x2 : int, y2 : int, z2)) : Point3 = 
+        let x = x1 - x2
+        let y = y1 - y2
+        let z = z1 - z2
+        Point3 (x, y, z)
+
+module Point3 = 
+    let dir (Point3 (x,  y, z)) = 
+        Point3 (sign x, sign y, sign z)
+    let x (Point3 (x, _, _)) = x
+    let y (Point3 (_, y, _)) = y
+    let z (Point3 (_, _, z)) = z
             
 module Pattern1 =
     let read (f : string -> 'a) (data : string) = 
@@ -77,6 +97,21 @@ module Array2D =
         then Some source.[i,j]
         else None
 
+module Array3D = 
+    let toSeq (a:'a[,,]) : seq<'a> =
+        a |> Seq.cast<'a>
+    let tryGet source i j k  =
+        if (i >= 0 && j >= 0 && k >= 0
+            && i < Array3D.length1 source
+            && j < Array3D.length2 source
+            && k < Array3D.length3 source)
+        then Some source[i,j,k]
+        else None
+    let atPoint (Point3(i,j,k)) source = 
+        Array3D.get source i j k
+    let tryAtPoint (Point3(i,j,k)) source = 
+        tryGet source i j k
+
 module Seq =
     open System.Collections.Generic
     let takeUntil predicate (s:seq<_>) = 
@@ -87,6 +122,10 @@ module Seq =
                     yield! loop en }
         seq { use en = s.GetEnumerator()
             yield! loop en }
+            
+    let group keySelector valueSelector source = 
+        source |> Seq.groupBy keySelector 
+        |> Seq.map (fun (key, entries) -> key, valueSelector entries)
 
 
 module Range = 

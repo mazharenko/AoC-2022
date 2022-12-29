@@ -1,6 +1,8 @@
 [<AutoOpen>]
 module common
 
+#nowarn "25"
+
 open System.Collections.Generic
 
 module Bfs = 
