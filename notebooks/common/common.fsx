@@ -21,6 +21,8 @@ let (|Regex|_|) pattern input =
     else
         None
 
+let inline (%%) (x: ^T1) (y: ^T2) : ^T3 = ((x % y) + y) % y
+
 type Point = | Point of (int * int) with
     static member Zero = Point(0, 0)
     static member (+)(Point (x1 : int, y1 : int), Point (x2 : int, y2 : int)) : Point = 
