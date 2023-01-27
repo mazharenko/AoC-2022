@@ -33,6 +33,14 @@ type Point = | Point of (int * int) with
         let x = x1 - x2
         let y = y1 - y2
         Point (x, y)
+    static member (*)(Point (x1 : int, y1 : int), n:int) : Point = 
+        let x = x1 * n
+        let y = y1 * n
+        Point (x, y)
+    static member (/)(Point (x1 : int, y1 : int), n:int) : Point = 
+        let x = x1 / n
+        let y = y1 / n
+        Point (x, y)
 
 module Point = 
     let dir (Point (x,  y)) = 
@@ -98,6 +106,10 @@ module Array2D =
             && j < Array2D.length2 source + Array2D.base2 source)
         then Some source.[i,j]
         else None
+    let atPoint (Point(i,j)) source = 
+        Array2D.get source i j
+    let tryAtPoint (Point(i,j)) source = 
+        tryGet i j source
 
 module Array3D = 
     let toSeq (a:'a[,,]) : seq<'a> =

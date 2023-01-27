@@ -82,6 +82,12 @@ let withSettings settings displayable  =
 let withMatrix (matrix : 'a[,]) (f : 'a -> Color) displayable = 
     {displayable with Matrices = (matrix |> Array2D.map f) :: displayable.Matrices}
 
+let combine displayables = 
+    {
+        Matrices = displayables |> List.collect (fun d -> d.Matrices)
+        Settings = (List.head displayables).Settings
+    }
+
 let private formatMatrix displayable = 
     let guid = System.Guid.NewGuid().ToString("N")
     let matrices = displayable.Matrices
