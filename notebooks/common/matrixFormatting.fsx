@@ -10,6 +10,7 @@ module private Array2D =
 
 let private toPoints (source: Color[,]) =
     source
+    |> Array2D.rebase
     |> Array2D.mapi (fun i j color -> 
         if color.IsEmpty || color.A = 0uy then None
         else 

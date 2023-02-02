@@ -110,6 +110,14 @@ module Array2D =
         Array2D.get source i j
     let tryAtPoint (Point(i,j)) source = 
         tryGet i j source
+    let fromPoints valueTrue valueFalse (points : Point list) = 
+        let minx = points |> Seq.map Point.x |> Seq.min
+        let miny = points |> Seq.map Point.y |> Seq.min
+        let maxx = points |> Seq.map Point.x |> Seq.max
+        let maxy = points |> Seq.map Point.y |> Seq.max
+        let m = Array2D.createBased minx miny (maxx - minx + 1) (maxy - miny + 1) valueFalse
+        points |> List.iter (fun (Point(x,y)) -> m[x,y] <- valueTrue)
+        m
 
 module Array3D = 
     let toSeq (a:'a[,,]) : seq<'a> =
