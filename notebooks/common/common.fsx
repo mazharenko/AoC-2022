@@ -3,6 +3,25 @@ module common
 
 #nowarn "25"
 
+open System.Collections.Generic
+
+
+let inline gcd (x : ^a) (y : ^a) : ^a =
+    let zero = LanguagePrimitives.GenericZero
+    let mutable absx = abs x
+    let mutable absy = abs y
+    while absx <> zero && absy <> zero do
+        if absx > absy 
+        then absx <- absx % absy
+        else absy <- absy % absx
+    absx + absy
+    
+let inline lcm x y = 
+    let zero = LanguagePrimitives.GenericZero
+    if x = zero || y = zero
+    then zero
+    else abs (x * y) / gcd x y
+
 let displayPipe x =
     x |> display |> ignore
     x
@@ -22,6 +41,19 @@ let (|Regex|_|) pattern input =
         None
 
 let inline (%%) (x: ^T1) (y: ^T2) : ^T3 = ((x % y) + y) % y
+
+
+let memoize f keyf =
+    let cache = Dictionary<_, _>()    
+    fun x ->
+        let key = keyf x
+        match cache.TryGetValue(key) with
+        | true, value -> 
+            value
+        | _ ->
+            let value = f x
+            cache.Add(key, value)
+            value
 
 type Point = | Point of (int * int) with
     static member Zero = Point(0, 0)
